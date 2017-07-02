@@ -8,3 +8,5 @@ output
 pca_model/*
 yt8m_model/*
 !.gitkeep
+
+*.idea
