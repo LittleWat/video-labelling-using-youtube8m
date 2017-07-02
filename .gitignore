@@ -1,0 +1,10 @@
+*.pyc
+*~
+output
+
+*.webm
+*.3gp
+
+pca_model/*
+yt8m_model/*
+!.gitkeep
