@@ -1,18 +1,16 @@
-from feature_extractor import get_feature_mat_from_video
-from my_pca import get_pcaed_feature
-
-from tqdm import tqdm_notebook as tqdm
-import tensorflow as tf
-import numpy as np
-
-from yt8m_utils import Dequantize
 import pprint
 
+import numpy as np
 import pandas as pd
+import tensorflow as tf
+
+from feature_extractor import get_feature_mat_from_video
+from my_pca import get_pcaed_feature
+from yt8m_utils import Dequantize
 
 
-def print_predicted_label(feature, topn=10,  latest_checkpoint = './yt8m_model/model.ckpt-2833', id2label_csv='./label_names.csv'):
-
+def print_predicted_label(feature, topn=10, latest_checkpoint='./yt8m_model/model.ckpt-2833',
+                          id2label_csv='./label_names.csv'):
     id2label_ser = pd.read_csv(id2label_csv, index_col=0)
     id2label = id2label_ser.to_dict()['label_name']
 
@@ -39,8 +37,6 @@ def print_predicted_label(feature, topn=10,  latest_checkpoint = './yt8m_model/m
 
     sess.run(set_up_init_ops(tf.get_collection_ref(
             tf.GraphKeys.LOCAL_VARIABLES)))
-    
-    
 
     padded_feature = np.zeros([300, 1024])
     padded_feature[:feature.shape[0], :] = Dequantize(feature)
@@ -48,14 +44,13 @@ def print_predicted_label(feature, topn=10,  latest_checkpoint = './yt8m_model/m
     num_frames_batch_val = np.array([feature.shape[0]], dtype=np.int32)
 
     predictions_val, = sess.run([predictions_tensor], feed_dict={input_tensor: video_batch_val,
-                                                                         num_frames_tensor: num_frames_batch_val})
+                                                                 num_frames_tensor: num_frames_batch_val})
 
     predictions_val = predictions_val.flatten()
 
     top_idxes = np.argsort(predictions_val)[::-1][:topn]
 
-    pprint.pprint ([(id2label[x], predictions_val[x]) for x in top_idxes])
-
+    pprint.pprint([(id2label[x], predictions_val[x]) for x in top_idxes])
 
 
 feature_2048_mat = get_feature_mat_from_video('gakky.webm')
