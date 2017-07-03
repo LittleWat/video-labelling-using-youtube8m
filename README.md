@@ -15,13 +15,18 @@ pip install -r requirements.txt
 
 ## Predict a Video Label
 
-1. Prepare a movie data
+1. Prepare trained models
+```
+python download_models.py
+```
+
+2. Prepare a movie data
     - Example: Download a movie data from youtube 
         ```
         pytube https://www.youtube.com/watch?v=korUVQbEA98&t=11s -f YOUR_MOVIE_FILENAME
         ```
 
-2. Predict a label of the movie
+3. Predict a label of the movie
 ```
 python video_label_prediction.py YOUR_MOVIE_FILENAME_WITH_EXTENSION  
 ```
