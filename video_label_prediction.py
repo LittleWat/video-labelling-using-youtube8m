@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+import argparse
 import pprint
 
 import numpy as np
@@ -53,8 +55,16 @@ def print_predicted_label(feature, topn=10, latest_checkpoint='./yt8m_model/mode
     pprint.pprint([(id2label[x], predictions_val[x]) for x in top_idxes])
 
 
-feature_2048_mat = get_feature_mat_from_video('gakky.webm')
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='video(< 3 min) label prediction')
+    parser.add_argument('video_filename')
 
-pca_feature = get_pcaed_feature(feature_2048_mat)
+    args = parser.parse_args()
 
-print_predicted_label(pca_feature)
+    feature_2048_mat = get_feature_mat_from_video(args.video_filename)
+    print ("Got separated image features using keras model")
+
+    pca_feature = get_pcaed_feature(feature_2048_mat)
+    print ("Got PCA feature")
+
+    print_predicted_label(pca_feature)
